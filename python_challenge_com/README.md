@@ -1,0 +1,1 @@
+This folder is being used to solve the python challange of http://www.pythonchallenge.com
