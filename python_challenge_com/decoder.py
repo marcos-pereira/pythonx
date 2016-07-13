@@ -11,7 +11,6 @@ message_to_decode_5 = "lmu ynnjw ml rfc spj."
 
 message_to_decode = "g fmnc wms bgblr rpylqjyrc gr zw fylb. rfyrq ufyr amknsrcpq ypc dmp. bmgle gr gl zw fylb gq glcddgagclr ylb rfyr'q ufw rfgq rcvr gq qm jmle. sqgle qrpgle.kyicrpylq() gq pcamkkclbcb. lmu ynnjw ml rfc spj."
 url_message = "http://www.pythonchallenge.com/pc/def/map.html"
-message_to_decode = url_message
 
 # Decoding loop: letter + 2 positions
 # ex: 
@@ -26,7 +25,12 @@ for ii in xrange(97,97+26):
 # Encoded alphabet
 code = ""
 for ii in xrange(97,97+26):
-	code += chr(ii+2)
+	if ii == 97+24:
+		code += 'a'
+	if ii == 97+25:
+		code += 'b'	
+	if ii < 97+24:
+		code += chr(ii+2)
 
 print("Alphabet: ", alphabet)
 print("Alpha Code: ", code)
@@ -35,36 +39,13 @@ print("Alpha Code: ", code)
 decoder = string.maketrans(alphabet, code)
 
 # Decode string
-decoded_message = message_to_decode.translate(decoder)
+decoded_message = url_message.translate(decoder)
 
 print("Coded message: ", message_to_decode)
 print("Decoded message: ", decoded_message)
 
-# for ii in xrange(0, len(message_1)):
-# 	# print message_1[ii]
-# 	print chr(ord(u,message_to_decode_1[ii])+2),
-# print 
-
-# for ii in xrange(0, len(message_1)):
-# 	# print message_1[ii]	
-# 	print chr(ord(message_to_decode_2[ii])+2),
-# print
-
-# for ii in xrange(0, len(message_1)):
-# 	# print message_1[ii]	
-# 	print chr(ord(message_to_decode_3[ii])+2),
-# print
-
-# for ii in xrange(0, len(message_1)):
-# 	# print message_1[ii]	
-# 	print chr(ord(message_to_decode_4[ii])+2),
-# print
-
-# for ii in xrange(0, len(message_1)):
-# 	# print message_1[ii]	
-# 	print chr(ord(message_to_decode_5[ii])+2),		
-# print
-
-
+# Should also work, but with Python 3.0
+# message_to_decode.translate(bytes.maketrans(b"abcdefghijklmnopqrstuvwxyz",b"cdefghijklmnopqrstuvwxyzab"))
+# print message_to_decode
 
 # See: http://www.dotnetperls.com/ord-python
