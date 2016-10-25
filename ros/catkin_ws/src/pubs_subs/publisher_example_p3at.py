@@ -11,6 +11,9 @@ from std_msgs.msg import String
 import hokuyo_node
 import sensor_msgs.msg
 
+def hokuyoCb(self, data1):
+    print data1    
+
 def callback(data):
     rospy.loginfo(rospy.get_caller_id() + "\nI heard:\n")
     print data
@@ -47,9 +50,9 @@ def talker():
         #              callback)   
 
         # If you desire to get p3at odometry     
-        rospy.Subscriber('/odom',Odometry, odometryCb)
+        # rospy.Subscriber('/odom',Odometry, odometryCb)
 
-        # rospy.Subscriber("/hokuyo_scan",sensor_msgs.msg.LaserScan,callback,10)
+        rospy.Subscriber("/hokuyo_scan",sensor_msgs.msg.LaserScan,callback,10)
 
         # Try to publish pose to turtlesim 
         # but does not make sense since turtlesim subscribe only /turtle1/cmd_vel
