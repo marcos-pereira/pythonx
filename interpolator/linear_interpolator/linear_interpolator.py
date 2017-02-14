@@ -59,21 +59,37 @@ else:
 
 #-------------------------------------------------------------------------------
 # Do linear interpolation
+# Reference: https://support.microsoft.com/en-au/help/214096/method-to-calculate-interpolation-step-value-in-excel
 #-------------------------------------------------------------------------------
 try:
-    if file_data_len == 0: raise(EmptyFile("Data file " + data_file + " is empty!"));
+	if file_data_len == 0: raise(EmptyFile("Data file " + data_file + " is empty!"));
 except Exception, empty_data_file:
-    print "Data file " + data_file + " is empty!";
+	print "Data file " + data_file + " is empty!";
 else:
-    derivative_rate = [];
-    interpolated_values = [];
-    steps_number_to_add = 2;
-    for ii in xrange(1, file_data_len-1):
-        derivative_rate.append((file_data[ii+1] - file_data[ii])/(steps_number_to_add+1));        
-        print derivative_rate;
-
-    # for jj in xrange(1, steps_number_to_add):            
-    #     interpolated_values.append(file_data[ii]+derivative_rate[jj]);        
+	derivative_rate = [];
+	interpolated_values = [];
+	steps_number_to_add = 3;
+	for ii in xrange(0, file_data_len-1):
+		derivative_rate.append((file_data[ii+1] - file_data[ii])/(steps_number_to_add+1));		
+	
+	for ii in xrange(0, file_data_len-1):
+		interpolated_values.append(file_data[ii]);
+		print "ii: " + str(ii);
+		print "file data " + str(file_data[ii]);
+		for jj in xrange(len(interpolated_values)-1, len(interpolated_values)-1+steps_number_to_add):			
+			print "interpolated_values " + str(interpolated_values[jj]);
+			interpolation_result = interpolated_values[jj]+derivative_rate[ii];
+			interpolated_values.append(interpolation_result);
+			print "jj: " + str(jj) + ", res: " + str(interpolation_result);		
+	interpolated_values.append(file_data[len(file_data)-1]); # Add the last value									
+	print "Input data:"
+	print file_data;
+	print "Derivative rates:"
+	print derivative_rate;
+	print "Linear interpolation result: ";
+	print interpolated_values;
+	print "Steps added between each initial data: ";
+	print steps_number_to_add;	
 
 #-------------------------------------------------------------------------------
 # Plot data from file
@@ -83,9 +99,10 @@ try:
 except Exception, empty_data_file:
 	print "Data file " + data_file + " is empty!";
 else:	
-	print "Ploting data from file...";	
+	print "Plotting data from file...";	
 	# plt.subplot(3,1,1)
+	plt.plot(interpolated_values, interpolated_values, "bx");
 	plt.plot(file_data, file_data, "ro")
 	plt.ylabel('yaxis')
 	plt.xlabel('xaxis')
-	plt.show()
+	plt.show()	
