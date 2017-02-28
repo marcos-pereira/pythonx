@@ -42,14 +42,23 @@ data_file_name = "test_name";
 data_file_extension = ".txt";
 data_file = data_file_name + "_" + data_file_number + data_file_extension;
 
+#-------------------------------------------------------------------------------
+# Output data file name including interpolated values
+#-------------------------------------------------------------------------------
+output_data_file_extension = ".txt";
+output_data_file_name = data_file_name + \
+"_" + data_file_number + \
+"_interpolation_result" + \
+output_data_file_extension;
+
+#-------------------------------------------------------------------------------
+# Read data file and store it into array
+#-------------------------------------------------------------------------------
 try:
 	open(data_file) is not None
 except Exception, e:
 	print "File " + data_file + " not found!" + "\n";
-else:
-	#-------------------------------------------------------------------------------
-	# Read data file and store into array
-	#-------------------------------------------------------------------------------
+else:	
 	with open(data_file) as file_holder:
 		array = []
 		for line in file_holder: # read rest of lines
@@ -99,10 +108,28 @@ try:
 except Exception, empty_data_file:
 	print "Data file " + data_file + " is empty!";
 else:	
-	print "Plotting data from file...";	
-	# plt.subplot(3,1,1)
+	print "Plotting data from file...";		
 	plt.plot(interpolated_values, interpolated_values, "bx");
 	plt.plot(file_data, file_data, "ro")
 	plt.ylabel('yaxis')
 	plt.xlabel('xaxis')
+	print "Just close the plot window to save the interpolated data to a .txt file..."
 	plt.show()	
+	
+
+#-------------------------------------------------------------------------------
+# Write interpolated data to file
+#-------------------------------------------------------------------------------
+try:
+	output_file_try_create = open(output_data_file_name,'w') is not None;
+except Exception, empty_data_file:
+	print "Data file " + output_data_file_name + " could not be created!";
+else:	
+	print "Creating output file " + output_data_file_name + "... " + str(output_file_try_create) + ".";
+	output_file_ = open(output_data_file_name,'w');
+	print "Writing data to file" + output_data_file_name + "...";	
+	# output_file_.write('interpolated data\n'); # just modify this header as desired
+	output_file_.write("\n".join(str(elem) for elem in interpolated_values));
+	output_file_.close();
+	print "Close file and finish everything."
+	
