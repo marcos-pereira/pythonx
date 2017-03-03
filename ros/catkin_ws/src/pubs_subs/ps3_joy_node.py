@@ -13,6 +13,47 @@ from std_msgs.msg import String
 import hokuyo_node
 import sensor_msgs.msg
 
+
+#-------------------------------------------------------------------------
+# How to use the PS3 controller via USB to control the ROS turtlesim_node
+# Reference: http://wiki.ros.org/joy/Tutorials/ConfiguringALinuxJoystick
+#-------------------------------------------------------------------------
+
+# 1) Install the ROS Joy Package: 
+# $ sudo apt-get install ros-indigo-joy
+# 2) Connect your joystick to the computer and check if it was recognized: 
+# $ ls /dev/input/
+# It should appear as jsX, most times it will be js0
+# 3) Make sure the joystick is working:
+# $ sudo jstest /dev/input/jsX
+# Press each of the joystick buttons and see the values changing
+# 4) Check the permissions of the joystick:
+# $ ls -l /dev/input/jsX
+# They should be crw-rw-rw-
+# If not, then change them:
+# $ sudo chmod a+rw /dev/input/jsX
+# 5) The joystick will publish data over ROS after the joy node is started
+#    and the joy ROS node must know which joystick to use
+# Start ros, tell ROS which joystick to use and start the ROS joy node:
+# $ roscore
+# $ rosparam set joy_node/dev "/dev/input/jsX"
+# $ rosrun joy joy_node
+# 6) Check the data read from the joystick through the joy topic:
+# $ rostopic echo joy
+# 7) Now, with the joy_node running, start the turtlesim_node:
+# $ rosrun turtlesim turtlesim_node
+# 8) Finally, call the ps3_joy_node which will subscribe to the joy node, 
+# get the data from the joy node and publish to the turtlesim_node:
+# $ python ps3_joy_node.py
+# 9) DONE! Now you can control the turtle in the ROS turtlesim with your 
+# PS3 controller via USB
+
+
+#-------------------------------------------------------------------------
+# PS3 controller buttons mapping
+# Reference: http://wiki.ros.org/ps3joy
+#-------------------------------------------------------------------------
+
 # note on plain values:
 # buttons are either 0 or 1
 # button axes go from 0 to -1
@@ -56,6 +97,8 @@ import sensor_msgs.msg
 #define PS3_AXIS_ACCELEROMETER_FORWARD   17
 #define PS3_AXIS_ACCELEROMETER_UP        18
 #define PS3_AXIS_GYRO_YAW                19
+#-------------------------------------------------------------------------
+
 
 ps3_joystick_state = 0
 
