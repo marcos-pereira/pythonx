@@ -1,5 +1,6 @@
 """
 Created on Tue Fev 2017 21:24:35 2017
+Last modify on Sun 16 Apr 2017 
 @author: marcos-pereira
 """
 
