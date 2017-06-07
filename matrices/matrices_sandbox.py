@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 import math as math
+from collections import OrderedDict # Needed to remove repeated labels on plots
 
 #-------------------------------------------------------------------------------
 # Declare matrices to test
@@ -131,12 +132,94 @@ print "squared_error_norm:";
 print squared_error_norm;
 
 # Plot given data
-print "Plotting input data for i";		
-plt.plot(i_output, u_input, "bx");
+print "Plotting i and estimated points";		
+plt.plot(i_output, u_input, "ro", markersize = 5, label = 'i');
 # Plot estimated data
-plt.plot(A_x0.T, u_input, "ro"); # use transpose(A_x0) because it was a column vector
+plt.plot(A_x0.T, u_input, "bx", markersize = 10, label = 'i estimated'); # use transpose(A_x0) because it was a column vector
 plt.ylabel('i');
 plt.xlabel('u');
+# Remove repeated labels
+handles, labels = plt.gca().get_legend_handles_labels();
+by_label = OrderedDict(zip(labels, handles));
+plt.legend(by_label.values(), by_label.keys(), loc = 'best', numpoints = 1);
+plt.grid(True);
 # TODO: implement save_to_file
 # print "Just close the plot window to save the interpolated data to a .txt file...";
 plt.show();
+
+#-------------------------------------------------------------------------------
+# EXAMPLE 2
+# Test to do a least squares minimization and obtain the linear model of a system given inputs and outputs
+#-------------------------------------------------------------------------------
+# U = b + (1/L)*a, the parameters to estimate are a and b, L is the input variable
+# L = [10 20 30 40 50 60 70 80]
+# U = [2.4 1.4 1.0 0.75 0.6 0.55 0.5 0.4]
+
+# L_inputs
+L_input = np.matrix( [[10, 20, 30, 40, 50, 60, 70, 80]] );
+print "L_input:";
+print L_input;
+
+# Calculate 1/L
+L_input_inverse = np.asarray(L_input)**-1.0;
+print "L_input_inverse";
+print L_input_inverse;
+
+# Create column of ones
+ones_vector = np.ones(8);
+ones_vector = np.matrix(ones_vector);
+print "ones_vector:";
+print ones_vector;
+
+# Create A_matrix_2
+A_matrix_2 = np.concatenate((ones_vector,L_input_inverse), axis=0).T; # The transpose is used because the A_matrix should be a two column matrix
+print "A_matrix_2:";
+print A_matrix_2;
+
+# Print system output U
+U_output = np.matrix( [[2.4, 1.4, 1.0, 0.75, 0.6, 0.55, 0.5, 0.4]] );
+print "U_output:";
+print U_output;
+
+# Calculate the pseudo inverse of A
+A_2_pinv = (A_matrix_2.T * A_matrix_2).I * A_matrix_2.T
+print "A_2_pinv:";
+print A_2_pinv;
+
+# Calculate x0 = pinv(A) * b = pinv(A) * U
+x0_2 = A_2_pinv * U_output.T;
+print "x0_2:";
+print x0_2;
+
+# Calculate A_matrix_2*x0_2 = b = U 
+A_x0_2 = A_matrix_2 * x0_2;
+print "A_x0_2:";
+print A_x0_2;
+
+# Calculate estimation error for each point
+estimation_error_2 = U_output.T - A_x0_2;
+print "estimation_error = U_output.T - A_x0_2:";
+print estimation_error;
+
+# Calculate estimation squared error norm
+squared_error_norm_2 = np.asarray(U_output.T - A_x0_2)**2;
+squared_error_norm_2 = np.linalg.norm(squared_error_norm_2, ord = 2); # Ref: https://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.norm.html
+print "squared_error_norm_2:";
+print squared_error_norm_2;
+
+# Plot given data
+print "Plotting U and estimated points";		
+plt.plot(U_output, L_input, "ro", markersize = 5, label = 'U');
+# Plot estimated data
+plt.plot(A_x0_2.T, L_input, "bx", markersize = 10, label = 'U estimated'); # use transpose(A_x0) because it was a column vector
+plt.ylabel('U');
+plt.xlabel('L');
+# Remove repeated labels
+handles, labels = plt.gca().get_legend_handles_labels();
+by_label = OrderedDict(zip(labels, handles));
+plt.legend(by_label.values(), by_label.keys(), loc = 'best', numpoints = 1);
+plt.grid(True);
+# TODO: implement save_to_file
+# print "Just close the plot window to save the interpolated data to a .txt file...";
+plt.show();
+
