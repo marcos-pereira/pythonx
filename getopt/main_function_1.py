@@ -4,7 +4,15 @@ import getopt
 class Usage(Exception):
     def __init__(self, msg):
         self.msg = msg
-        print "help usage"   
+
+def Help():
+    print "Usage:"   
+    print "Help:        -h, --help"
+    print "Output:      -o <arg>, --output <arg>"
+    print "Verbose:     -v, --verbose"
+    print "Version:     --version"
+    print "Superuser:   -s <arg>, --superuser <arg>"
+    print "Input:       -i <arg>, --input <arg>"    
 
 def do_stuff():
     status = False
@@ -26,27 +34,28 @@ def main(argv=None):
             print 'OPTIONS   :', opts
 
             for opt, arg in opts:
-                if opt in ('-o', '--output'):   # if the opt "-o" is used
+                if opt in ('-o', '--output'):       # if the opt "-o" is used
                     print "opt ="
                     print opt
                     print "arg ="
                     print arg
-                elif opt in ('-v', '--verbose'): # if the opt "-v" is used
+                elif opt in ('-v', '--verbose'):    # if the opt "-v" is used
                     verbose = True
                     print "verbose = " + str(verbose);
-                elif opt == '--version':        # if the opt "--version" is used
+                elif opt == '--version':            # if the opt "--version" is used
                     version = arg
-                elif opt in ('-h','--help'):
+                elif opt in ('-h','--help'):        # if the opt "-h" is used
                     print "opt ="
                     print opt
                     print "arg ="
                     print arg
-                elif opt in ('-s','--superuser'):
+                    Help()
+                elif opt in ('-s','--superuser'):   # if the opt "-s" is used
                     print "opt ="
                     print opt
                     print "arg ="
                     print arg
-                elif opt in ('-i','--input'):
+                elif opt in ('-i','--input'):       # if the opt "-i" is used
                     print "opt ="
                     print opt
                     print "arg ="
