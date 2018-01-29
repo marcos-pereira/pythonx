@@ -1,0 +1,2 @@
+Text of file: 
+	This file is corrupted
